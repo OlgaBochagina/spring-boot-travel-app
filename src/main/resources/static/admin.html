@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Администратор | Турагентство</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #87CEEB, #FFD700);
+            color: #333;
+        }
+        .container {
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 1200px;
+        }
+        h1 {
+            font-size: 2.5em;
+            color: #2E8B57;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        h2 {
+            color: #2E8B57;
+            margin-top: 20px;
+        }
+        button {
+            font-size: 1em;
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #FFD700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            background-color: #FFA500;
+            transform: translateY(-2px);
+        }
+        #logoutBtn {
+            background-color: #2E8B57;
+            color: white;
+        }
+        #logoutBtn:hover {
+            background-color: #1f6e43;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Панель администратора</h1>
+    <section>
+        <h2>Управление турами</h2>
+        <table id="toursTable">
+            <thead>
+            <tr>
+                <th>Название тура</th>
+                <th>Направление</th>
+                <th>Цена</th>
+                <th>Действия</th>
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <button onclick="addTourRow()">Добавить тур</button>
+    </section>
+    <section>
+        <h2>Управление клиентами</h2>
+        <table id="clientsTable">
+            <thead>
+            <tr>
+                <th>Имя</th>
+                <th>Фамилия</th>
+                <th>Электронная почта</th>
+                <th>Действия</th>
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <button onclick="addClientRow()">Добавить клиента</button>
+    </section>
+    <section>
+        <h2>Просмотр бронирований</h2>
+        <table id="bookingsTable">
+            <thead>
+            <tr>
+                <th>Клиент</th>
+                <th>Тур</th>
+                <th>Статус</th>
+                <th>Действия</th>
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <button onclick="addBookingRow()">Добавить бронирование</button>
+    </section>
+    <button id="logoutBtn" onclick="logout()">Выйти</button>
+</div>
+
+<script>
+    const apiUrl = 'http://localhost:8081';
+
+    async function fetchAndPopulateTable(url, tableId, rowRenderer) {
+        const response = await fetch(url, {
+            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        });
+        const data = await response.json();
+        const tableBody = document.getElementById(tableId).querySelector('tbody');
+        tableBody.innerHTML = data.map(rowRenderer).join('');
+    }
+
+    async function fetchTours() {
+        await fetchAndPopulateTable(`${apiUrl}/admin/tours/all`, 'toursTable', tour => `
+            <tr>
+                <td>${tour.tourName}</td>
+                <td>${tour.destination}</td>
+                <td>${tour.price} руб.</td>
+                <td><button onclick="deleteTour(${tour.tourId})">Удалить</button></td>
+            </tr>`);
+    }
+
+    async function fetchClients() {
+        await fetchAndPopulateTable(`${apiUrl}/admin/tours/clients/all`, 'clientsTable', client => `
+            <tr>
+                <td>${client.firstName}</td>
+                <td>${client.lastName}</td>
+                <td>${client.email}</td>
+                <td><button onclick="deleteClient(${client.clientId})">Удалить</button></td>
+            </tr>`);
+    }
+
+    async function fetchBookings() {
+        await fetchAndPopulateTable(`${apiUrl}/admin/tours/bookings/all`, 'bookingsTable', booking => `
+            <tr>
+                <td>${booking.client.firstName} ${booking.client.lastName}</td>
+                <td>${booking.tour.tourName}</td>
+                <td>${booking.status}</td>
+                <td><button onclick="deleteBooking(${booking.bookingId})">Удалить</button></td>
+            </tr>`);
+    }
+
+    function addRow(tableId, inputs, submitCallback) {
+        const tableBody = document.getElementById(tableId).querySelector('tbody');
+        const row = document.createElement('tr');
+
+        inputs.forEach(input => {
+            const cell = document.createElement('td');
+            const inputElement = document.createElement('input');
+            inputElement.type = input.type;
+            inputElement.placeholder = input.placeholder;
+            cell.appendChild(inputElement);
+            row.appendChild(cell);
+        });
+
+        const actionsCell = document.createElement('td');
+        const submitButton = document.createElement('button');
+        submitButton.textContent = 'Сохранить';
+        submitButton.onclick = async () => {
+            await submitCallback(row);
+            submitButton.textContent = 'Удалить';
+            submitButton.onclick = async () => {
+                await deleteRow(row, tableId);
+            };
+        };
+        actionsCell.appendChild(submitButton);
+        row.appendChild(actionsCell);
+
+        tableBody.appendChild(row);
+    }
+
+    async function deleteRow(row, tableId) {
+        const tableBody = document.getElementById(tableId).querySelector('tbody');
+        tableBody.removeChild(row);
+    }
+
+    function addTourRow() {
+        addRow('toursTable', [
+            { type: 'text', placeholder: 'Название тура' },
+            { type: 'text', placeholder: 'Направление' },
+            { type: 'number', placeholder: 'Цена' }
+        ], async (row) => {
+            const [name, destination, price] = Array.from(row.querySelectorAll('input')).map(input => input.value);
+            const response = await fetch(`${apiUrl}/admin/tours/add`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify({ tourName: name, destination, price })
+            });
+            if (response.ok) {
+                const newTour = await response.json();
+                row.innerHTML = `
+                    <td>${newTour.tourName}</td>
+                    <td>${newTour.destination}</td>
+                    <td>${newTour.price} руб.</td>
+                    <td><button onclick="deleteTour(${newTour.tourId})">Удалить</button></td>`;
+            }
+        });
+    }
+
+    function addClientRow() {
+        addRow('clientsTable', [
+            { type: 'text', placeholder: 'Имя' },
+            { type: 'text', placeholder: 'Фамилия' },
+            { type: 'email', placeholder: 'Электронная почта' }
+        ], async (row) => {
+            const [firstName, lastName, email] = Array.from(row.querySelectorAll('input')).map(input => input.value);
+            const response = await fetch(`${apiUrl}/admin/tours/clients/register`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify({ firstName, lastName, email })
+            });
+            if (response.ok) {
+                const newClient = await response.json();
+                row.innerHTML = `
+                    <td>${newClient.firstName}</td>
+                    <td>${newClient.lastName}</td>
+                    <td>${newClient.email}</td>
+                    <td><button onclick="deleteClient(${newClient.clientId})">Удалить</button></td>`;
+            }
+        });
+    }
+
+    function addBookingRow() {
+        addRow('bookingsTable', [
+            { type: 'text', placeholder: 'Клиент' },
+            { type: 'text', placeholder: 'Тур' },
+            { type: 'text', placeholder: 'Статус' }
+        ], async (row) => {
+            const [clientId, tourId, status] = Array.from(row.querySelectorAll('input')).map(input => input.value);
+            const response = await fetch(`${apiUrl}/manager/bookings/add`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify({ clientId, tourId, status })
+            });
+            if (response.ok) {
+                const newBooking = await response.json();
+                row.innerHTML = `
+                    <td>${newBooking.client.firstName} ${newBooking.client.lastName}</td>
+                    <td>${newBooking.tour.tourName}</td>
+                    <td>${newBooking.status}</td>
+                    <td><button onclick="deleteBooking(${newBooking.bookingId})">Удалить</button></td>`;
+            }
+        });
+    }
+
+    async function deleteTour(tourId) {
+        const response = await fetch(`${apiUrl}/admin/tours/delete/${tourId}`, {
+            method: 'DELETE',
+            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        });
+        if (response.ok) fetchTours();
+    }
+
+    async function deleteClient(clientId) {
+        const response = await fetch(`${apiUrl}/admin/tours/clients/delete/${clientId}`, {
+            method: 'DELETE',
+            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        });
+        if (response.ok) fetchClients();
+    }
+
+    async function deleteBooking(bookingId) {
+        const response = await fetch(`${apiUrl}/manager/bookings/delete/${bookingId}`, {
+            method: 'DELETE',
+            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        });
+        if (response.ok) fetchBookings();
+    }
+
+    function logout() {
+        localStorage.removeItem('token');
+        window.location.href = 'index.html';
+    }
+
+    fetchTours();
+    fetchClients();
+    fetchBookings();
+</script>
+</body>
+</html>
+
+

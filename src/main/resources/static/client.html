@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет | Турагентство</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #87CEEB, #FFD700);
+            color: #333;
+        }
+        .container {
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 1200px;
+        }
+        h1 {
+            font-size: 2.5em;
+            color: #2E8B57;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        h2 {
+            color: #2E8B57;
+            margin-top: 20px;
+        }
+        button {
+            font-size: 1em;
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #FFD700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            background-color: #FFA500;
+            transform: translateY(-2px);
+        }
+        #logoutBtn {
+            background-color: #2E8B57;
+            color: white;
+        }
+        #logoutBtn:hover {
+            background-color: #1f6e43;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Личный кабинет</h1>
+    <section>
+        <h2>Доступные туры</h2>
+        <input type="text" id="searchInput" placeholder="Введите направление" />
+        <button onclick="searchTours()">Найти</button>
+        <table id="toursTable">
+            <thead>
+            <tr>
+                <th>Название тура</th>
+                <th>Направление</th>
+                <th>Цена</th>
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </section>
+    <section>
+        <h2>Ваши бронирования</h2>
+        <table id="bookingsTable">
+            <thead>
+            <tr>
+                <th>Тур</th>
+                <th>Статус</th>
+                <th>Дата бронирования</th>
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </section>
+    <button id="logoutBtn" onclick="logout()">Выйти</button>
+</div>
+
+<script>
+    const apiUrl = 'http://localhost:8081';
+    const clientId = localStorage.getItem('clientId');
+
+    async function fetchTours() {
+        const response = await fetch(`${apiUrl}/clients/tours`, {
+            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        });
+        const tours = await response.json();
+        const tableBody = document.getElementById('toursTable').querySelector('tbody');
+        tableBody.innerHTML = tours
+            .map(tour => `
+                <tr>
+                    <td>${tour.tourName}</td>
+                    <td>${tour.destination}</td>
+                    <td>${tour.price} руб.</td>
+                </tr>`)
+            .join('');
+    }
+
+    async function searchTours() {
+        const destination = document.getElementById('searchInput').value;
+        const response = await fetch(`${apiUrl}/clients/tours/search?destination=${destination}`, {
+            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        });
+        const tours = await response.json();
+        const tableBody = document.getElementById('toursTable').querySelector('tbody');
+        tableBody.innerHTML = tours
+            .map(tour => `
+                <tr>
+                    <td>${tour.tourName}</td>
+                    <td>${tour.destination}</td>
+                    <td>${tour.price} руб.</td>
+                </tr>`)
+            .join('');
+    }
+
+    async function fetchBookings() {
+        const response = await fetch(`${apiUrl}/clients/${clientId}/bookings`, {
+            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        });
+        const bookings = await response.json();
+        const tableBody = document.getElementById('bookingsTable').querySelector('tbody');
+        tableBody.innerHTML = bookings
+            .map(booking => `
+                <tr>
+                    <td>${booking.tour.tourName}</td>
+                    <td>${booking.status}</td>
+                    <td>${new Date(booking.bookingDate).toLocaleDateString()}</td>
+                </tr>`)
+            .join('');
+    }
+
+    function logout() {
+        localStorage.removeItem('token');
+        localStorage.removeItem('clientId');
+        window.location.href = 'index.html';
+    }
+
+    fetchTours();
+    fetchBookings();
+</script>
+</body>
+</html>

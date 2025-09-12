@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация | Турагентство</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to bottom, #87CEEB, #FFD700);
+            color: #333;
+            text-align: center;
+        }
+        h1 {
+            font-size: 2.5em;
+            color: #2E8B57;
+            margin-bottom: 20px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        input {
+            font-size: 1em;
+            padding: 10px;
+            margin: 10px 0;
+            width: 100%;
+            max-width: 300px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+        button {
+            font-size: 1.2em;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            background-color: #FFD700;
+            color: #333;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        button:hover {
+            background-color: #FFA500;
+            transform: scale(1.05);
+        }
+        .error {
+            color: red;
+            font-size: 0.9em;
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<h1>Регистрация</h1>
+<form id="registerForm">
+    <input type="text" id="username" name="username" placeholder="Имя пользователя" required>
+    <input type="email" id="email" name="email" placeholder="Электронная почта" required>
+    <input type="password" id="password" name="password" placeholder="Пароль" required>
+    <input type="password" id="confirmPassword" name="confirm_password" placeholder="Подтвердите пароль" required>
+    <div id="error" class="error">Пароли не совпадают</div>
+    <button type="submit">Зарегистрироваться</button>
+</form>
+<script>
+    document.getElementById('registerForm').addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const username = document.getElementById('username').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        const errorDiv = document.getElementById('error');
+
+        // Проверка совпадения паролей
+        if (password !== confirmPassword) {
+            errorDiv.style.display = 'block';
+            errorDiv.textContent = 'Пароли не совпадают';
+            return;
+        } else {
+            errorDiv.style.display = 'none';
+        }
+
+        try {
+            const response = await fetch('http://localhost:8081/auth/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username,
+                    email,
+                    password,
+                    roleId: 2, // Роль клиента
+                    active: true,
+                }),
+            });
+
+            if (response.ok) {
+                alert('Регистрация успешна! Переход на страницу авторизации...');
+                window.location.href = 'login.html';
+            } else {
+                const errorData = await response.json();
+                errorDiv.style.display = 'block';
+                errorDiv.textContent = errorData.message || 'Ошибка регистрации. Попробуйте снова.';
+            }
+        } catch (error) {
+            console.error('Ошибка регистрации:', error);
+            errorDiv.style.display = 'block';
+            errorDiv.textContent = 'Не удалось подключиться к серверу.';
+        }
+    });
+</script>
+<script src="register.js"></script>
+</body>
+</html>
