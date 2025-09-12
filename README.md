@@ -55,4 +55,3 @@ I_love_java
 3. Запустить проект:
 ```bash
 ./gradlew bootRun
-4. Открыть в браузере: http://localhost:8080
