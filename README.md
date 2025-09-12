@@ -20,30 +20,25 @@
 - Frontend: HTML, CSS, JavaScript, Thymeleaf  
 - База данных: PostgreSQL  
 - ORM: Hibernate / JPA  
-- Прочее: JWT для аутентификации, Lombok, Gradle  
+- Прочее: JWT для аутентификации, Lombok, Gradle
+  
 ## Структура проекта
 src
-┣ config # Конфигурация приложения, безопасность (JWT, CORS)
-┣ controller # REST-контроллеры
-┣ dto # Data Transfer Objects
-┣ obj # Сущности (Clients, Bookings, Tours, User, Roles)
-┣ repo # Репозитории (Spring Data JPA)
-┣ service # Бизнес-логика (AuthService, BookingsService и др.)
-┗ resources # Статические файлы и шаблоны (Thymeleaf)
-
-bash
-Копировать код
+├── config       
+├── controller                          
+├── dto
+├── obj
+├── repo
+├── servise
+├── resourses
 
 ## Запуск проекта
 1. Клонировать репозиторий:
    ```bash
    git clone https://github.com/your-username/I_love_java.git
    cd I_love_java
-Настроить application.properties (подключение к PostgreSQL, логин/пароль).
-
-Запустить проект:
-
-bash
-Копировать код
+2. Настроить application.properties (подключение к PostgreSQL, логин/пароль).
+3. Запустить проект:
+```bash
 ./gradlew bootRun
-Открыть в браузере: http://localhost:8080
+4. Открыть в браузере: http://localhost:8080
