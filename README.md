@@ -24,19 +24,21 @@
   
 ## Структура проекта
 src
--config
--controller
--
+├── config # Конфигурация приложения, безопасность (JWT, CORS)        
+├── controller # REST-контроллеры                      
+├── dto # Data Transfer Objects
+├── obj # Сущности (Clients, Bookings, Tours, User, Roles)       
+├── repo # Репозитории (Spring Data JPA)                         
+├── service # Бизнес-логика (AuthService, BookingsService и др.)
+├── resourses # Статические файлы и шаблоны (Thymeleaf)
 
 ## Запуск проекта
 1. Клонировать репозиторий:
    ```bash
-   git clone https://github.com/your-username/I_love_java.git
+   git clone https://github.com/OlgaBochagina/spring-boot-travel-app.git
    cd I_love_java
 2. Настроить application.properties (подключение к PostgreSQL, логин/пароль).
 3. Запустить проект:
 ```bash
 ./gradlew bootRun
-
-
 4. Открыть в браузере: http://localhost:8080
