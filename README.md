@@ -23,7 +23,10 @@
 - Прочее: JWT для аутентификации, Lombok, Gradle
   
 ## Структура проекта
-
+src
+-config
+-controller
+-
 
 ## Запуск проекта
 1. Клонировать репозиторий:
@@ -33,5 +36,7 @@
 2. Настроить application.properties (подключение к PostgreSQL, логин/пароль).
 3. Запустить проект:
 ```bash
-./gradlew bootRun```
+./gradlew bootRun
+
+
 4. Открыть в браузере: http://localhost:8080
