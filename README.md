@@ -23,14 +23,28 @@
 - Прочее: JWT для аутентификации, Lombok, Gradle
   
 ## Структура проекта
-src
-├── config # Конфигурация приложения, безопасность (JWT, CORS)        
-├── controller # REST-контроллеры                      
-├── dto # Data Transfer Objects
-├── obj # Сущности (Clients, Bookings, Tours, User, Roles)       
-├── repo # Репозитории (Spring Data JPA)                         
-├── service # Бизнес-логика (AuthService, BookingsService и др.)
-├── resourses # Статические файлы и шаблоны (Thymeleaf)
+
+I_love_java
+┣ .idea/ # Настройки IntelliJ IDEA (необязательно для репозитория)
+┣ build.gradle # Файл сборки Gradle
+┣ gradlew / gradlew.bat # Скрипты для запуска Gradle Wrapper
+┣ settings.gradle # Конфигурация Gradle проекта
+┣ src
+┃ ┣ main
+┃ ┃ ┣ java/com/example/demo20
+┃ ┃ ┃ ┣ config/ # Конфигурация приложения (безопасность, JWT, CORS)
+┃ ┃ ┃ ┣ controller/ # Контроллеры MVC и REST API
+┃ ┃ ┃ ┣ dto/ # DTO-объекты для передачи данных
+┃ ┃ ┃ ┣ obj/ # Сущности JPA (Clients, Bookings, Tours, User, Roles)
+┃ ┃ ┃ ┣ repo/ # Репозитории Spring Data JPA
+┃ ┃ ┃ ┣ service/ # Сервисный слой (бизнес-логика)
+┃ ┃ ┃ ┗ TravelAgencyApplication.java # Главный класс запуска Spring Boot
+┃ ┃ ┗ resources
+┃ ┃ ┃ ┣ static/ # Статические ресурсы (HTML, CSS, JS)
+┃ ┃ ┃ ┣ templates/ # Шаблоны Thymeleaf (если используются)
+┃ ┃ ┃ ┗ application.properties # Настройки приложения
+┃ ┗ test/ # Тесты (юнит и интеграционные)
+┗ README.md # Документация проекта
 
 ## Запуск проекта
 1. Клонировать репозиторий:
