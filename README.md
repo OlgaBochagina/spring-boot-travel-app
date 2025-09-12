@@ -25,26 +25,26 @@
 ## Структура проекта
 
 I_love_java
-┣ .idea/ # Настройки IntelliJ IDEA (необязательно для репозитория)
-┣ build.gradle # Файл сборки Gradle
-┣ gradlew / gradlew.bat # Скрипты для запуска Gradle Wrapper
-┣ settings.gradle # Конфигурация Gradle проекта
-┣ src
-┃ ┣ main
-┃ ┃ ┣ java/com/example/demo20
-┃ ┃ ┃ ┣ config/ # Конфигурация приложения (безопасность, JWT, CORS)
-┃ ┃ ┃ ┣ controller/ # Контроллеры MVC и REST API
-┃ ┃ ┃ ┣ dto/ # DTO-объекты для передачи данных
-┃ ┃ ┃ ┣ obj/ # Сущности JPA (Clients, Bookings, Tours, User, Roles)
-┃ ┃ ┃ ┣ repo/ # Репозитории Spring Data JPA
-┃ ┃ ┃ ┣ service/ # Сервисный слой (бизнес-логика)
-┃ ┃ ┃ ┗ TravelAgencyApplication.java # Главный класс запуска Spring Boot
-┃ ┃ ┗ resources
-┃ ┃ ┃ ┣ static/ # Статические ресурсы (HTML, CSS, JS)
-┃ ┃ ┃ ┣ templates/ # Шаблоны Thymeleaf (если используются)
-┃ ┃ ┃ ┗ application.properties # Настройки приложения
-┃ ┗ test/ # Тесты (юнит и интеграционные)
-┗ README.md # Документация проекта
+ ┣ .idea/                  # Настройки IntelliJ IDEA (можно исключить из репозитория)
+ ┣ build.gradle            # Файл сборки Gradle
+ ┣ gradlew / gradlew.bat   # Скрипты для запуска Gradle Wrapper
+ ┣ settings.gradle         # Конфигурация Gradle проекта
+ ┣ src
+ ┃ ┣ main
+ ┃ ┃ ┣ java/com/example/demo20
+ ┃ ┃ ┃ ┣ config/           # Конфигурация приложения (Spring Security, JWT, CORS)
+ ┃ ┃ ┃ ┣ controller/       # Контроллеры MVC и REST API
+ ┃ ┃ ┃ ┣ dto/              # DTO-объекты для передачи данных
+ ┃ ┃ ┃ ┣ obj/              # Сущности JPA (Clients, Bookings, Tours, User, Roles)
+ ┃ ┃ ┃ ┣ repo/             # Репозитории Spring Data JPA
+ ┃ ┃ ┃ ┣ service/          # Сервисный слой (бизнес-логика)
+ ┃ ┃ ┃ ┗ TravelAgencyApplication.java # Главный класс запуска Spring Boot
+ ┃ ┃ ┗ resources
+ ┃ ┃ ┃ ┣ static/           # Статические ресурсы (HTML, CSS, JS)
+ ┃ ┃ ┃ ┣ templates/        # Шаблоны Thymeleaf (если используются)
+ ┃ ┃ ┃ ┗ application.properties # Настройки приложения (БД, порты и др.)
+ ┃ ┗ test/                 # Тесты (юнит и интеграционные)
+ ┗ README.md               # Документация проекта
 
 ## Запуск проекта
 1. Клонировать репозиторий:
