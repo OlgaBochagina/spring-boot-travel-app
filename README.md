@@ -23,14 +23,7 @@
 - Прочее: JWT для аутентификации, Lombok, Gradle
   
 ## Структура проекта
-src
-├── config       
-├── controller                          
-├── dto
-├── obj
-├── repo
-├── servise
-├── resourses
+
 
 ## Запуск проекта
 1. Клонировать репозиторий:
