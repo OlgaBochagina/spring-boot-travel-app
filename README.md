@@ -46,9 +46,10 @@
 │ │ │ │ ├── manager.html   # Панель менеджера
 │ │ │ │ ├── register.html  # Страница регистрации
 │ │ │ │ ├── register.js    # Скрипт обработки регистрации
-└── ... ```
+└── ... 
 
 ## Запуск проекта
+```
 1. Клонировать репозиторий:
    ```bash
    git clone https://github.com/OlgaBochagina/spring-boot-travel-app.git
