@@ -28,25 +28,25 @@
 │ ├── main/
 │ │ ├── java/
 │ │ │ ├── com.example.demo20/
-│ │ │ │ ├── config/
-│ │ │ │ ├── controller
-│ │ │ │ ├── DataTransferObject
-│ │ │ │ ├── obj
-│ │ │ │ ├── repo
-│ │ │ │ ├── service
-│ │ │ │ ├── GlobalExceptionHandler
-│ │ │ │ └── TravelAgencyApplication
+│ │ │ │ ├── config                  # Конфигурации приложения (Spring Security, CORS, JWT и т.д.)
+│ │ │ │ ├── controller              # REST-контроллеры (AdminController, AuthController, ManagerController, ClientsController)
+│ │ │ │ ├── DataTransferObject      # DTO-классы для передачи и валидации данных (LoginRequest, RegisterRequest, TokenResponse)
+│ │ │ │ ├── obj                     # Основные сущности (Bookings, Clients, Roles, Tours, User)
+│ │ │ │ ├── repo                    # Репозитории JPA для работы с БД (BookingsRepository, ClientsRepository и т.д.)
+│ │ │ │ ├── service                 # Сервисы с бизнес-логикой (AuthService, BookingsService, ClientsService и др.)
+│ │ │ │ ├── GlobalExceptionHandler  # Глобальная обработка исключений
+│ │ │ │ └── TravelAgencyApplication # Главный класс запуска Spring Boot приложения
 │ │ ├── resourses/
 │ │ │ ├── static/
-│ │ │ │ ├── admin.html
-│ │ │ │ ├── client.html
-│ │ │ │ ├── index.html
-│ │ │ │ ├── login.html
-│ │ │ │ ├── login.js
-│ │ │ │ ├── manager.html
-│ │ │ │ ├── register.html
-│ │ │ │ ├── register.js
-└── ... ```
+│ │ │ │ ├── admin.html     # Интерфейс панели администратора
+│ │ │ │ ├── client.html    # Личный кабинет клиента
+│ │ │ │ ├── index.html     # Главная страница
+│ │ │ │ ├── login.html     # Страница авторизации
+│ │ │ │ ├── login.js       # Скрипт обработки авторизации
+│ │ │ │ ├── manager.html   # Панель менеджера
+│ │ │ │ ├── register.html  # Страница регистрации
+│ │ │ │ ├── register.js    # Скрипт обработки регистрации
+└── ... 
 
 ## Запуск проекта
 1. Клонировать репозиторий:
