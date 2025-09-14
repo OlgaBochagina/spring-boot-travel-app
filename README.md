@@ -23,6 +23,30 @@
 - Прочее: JWT для аутентификации, Lombok, Gradle
   
 ## Структура проекта
+```i_love_java-master/
+├── src/
+│ ├── main/
+│ │ ├── java/
+│ │ │ ├── com.example.demo20/
+│ │ │ │ ├── config/
+│ │ │ │ ├── controller
+│ │ │ │ ├── DataTransferObject
+│ │ │ │ ├── obj
+│ │ │ │ ├── repo
+│ │ │ │ ├── service
+│ │ │ │ ├── GlobalExceptionHandler
+│ │ │ │ └── TravelAgencyApplication
+│ │ ├── resourses/
+│ │ │ ├── static/
+│ │ │ │ ├── admin.html
+│ │ │ │ ├── client.html
+│ │ │ │ ├── index.html
+│ │ │ │ ├── login.html
+│ │ │ │ ├── login.js
+│ │ │ │ ├── manager.html
+│ │ │ │ ├── register.html
+│ │ │ │ ├── register.js
+└── ... ```
 
 ## Запуск проекта
 1. Клонировать репозиторий:
